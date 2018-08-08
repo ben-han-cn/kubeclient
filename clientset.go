@@ -21,5 +21,6 @@ func NewClientSet(master, kubeconfig string) (*kubernetes.Clientset, error) {
 	if err != nil {
 		return nil, err
 	}
+	config.ContentType = "application/vnd.kubernetes.protobuf"
 	return kubernetes.NewForConfig(config)
 }
