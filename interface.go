@@ -16,7 +16,7 @@ type ControllerOptions struct {
 
 type ResourceController interface {
 	cache.ResourceEventHandler
-	GetOptions() *ControllerOptions
+	GetResourceIndexers(string) cache.Indexers
 }
 
 func defaultOptionModifier(opts *ControllerOptions) func(opts *metav1.ListOptions) {
