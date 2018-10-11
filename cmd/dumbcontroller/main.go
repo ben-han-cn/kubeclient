@@ -3,13 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	osig "os/signal"
+	"syscall"
 	"time"
 
-	"cement/signal"
+	"github.com/ben-han-cn/kubeclient"
 	api "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/kubernetes/kubeclient"
 )
 
 type DumbController struct {
@@ -61,6 +63,16 @@ func (c *DumbController) OnDelete(obj interface{}) {
 
 func (c *DumbController) GetResourceIndexers(resource string) cache.Indexers {
 	return nil
+}
+
+func WaitForInterrupt(cb func()) {
+	signalCh := make(chan os.Signal)
+	osig.Notify(signalCh, os.Interrupt, syscall.SIGTERM)
+	<-signalCh
+
+	if cb != nil {
+		cb()
+	}
 }
 
 func main() {
