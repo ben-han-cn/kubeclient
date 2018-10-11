@@ -92,7 +92,7 @@ func main() {
 	serviceCache, _ := kubeclient.NewResourceCache(client, "services", controller, opts)
 	go serviceCache.Run()
 
-	signal.WaitForInterrupt(func() {
+	WaitForInterrupt(func() {
 		podCache.Stop()
 		serviceCache.Stop()
 		log.Print("existing !!")
